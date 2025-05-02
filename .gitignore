@@ -1,0 +1,25 @@
+# By default git saves ALL files but those mentioned in the .gitignore file (blacklist)
+# However, sometimes it is more practical to do the reverse. That is, to save NO files but those mentioned in the .gitignore file (whitelist)
+# To achieve that, we use "*", which means "EVERYTHING", and "!" which means "do not ignore the specific pattern"
+# With that in mind:
+
+# We ignore all files (but not the directories)
+*
+!*/
+
+# EXCEPT
+!*.csv
+# the .gitignore file
+!.gitignore
+# everything that is a jupyter notebook 
+!*.ipynb  
+# everything that is a pdf
+!*.pdf
+# everything that is a markdown 
+!*.md
+# everything that is a txt
+!*.txt
+!*.py 
+!*.pkl
+!*.png
+# Add anything that you should be included but it's not
