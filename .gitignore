@@ -22,4 +22,5 @@
 !*.py 
 !*.pkl
 !*.png
+!*.pdb
 # Add anything that you should be included but it's not
