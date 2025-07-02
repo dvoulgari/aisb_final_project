@@ -11,14 +11,6 @@ from Bio import PDB
 
 warnings.filterwarnings("ignore")
 
-# --- Compute the Euclidean distance between two points ---
-def euclidean_distance(x, y):
-    """
-    The euclidean distance between two 3D points.
-    """
-
-    return np.sqrt((x[0][0]-y[0][0])**2 + (x[0][1]-y[0][1])**2+(x[0][2]-y[0][2])**2)
-
 # --- PDB Extraction Function ---
 def extract_ca_coordinates(pdb_file):
     """
@@ -139,110 +131,11 @@ def frechet_with_rmsd_cost(seq1_coords, seq2_coords):
 
     # Optional: Traceback to get the warping path
     path = []
-    # i, j = n - 1, m - 1
-    # path.append((i, j))
-    # while i > 0 or j > 0:
-    #     candidates = []
-    #     if i > 0 and j > 0:
-    #         candidates.append((D[i - 1, j - 1], i - 1, j - 1))
-    #     if i > 0:
-    #         candidates.append((D[i - 1, j], i - 1, j))
-    #     if j > 0:
-    #         candidates.append((D[i, j - 1], i, j - 1))
-    #     if candidates:
-    #         _, i, j = min(candidates)
-    #         path.append((i, j))
-
-    # path.reverse()
-
 
     total_cost = D[n-1, m-1]
-    # length_of_warping_path = len(path)
-
-    # if length_of_warping_path > 0:
-    #     normalized_frechet_cost = total_cost / length_of_warping_path
-    # else:
-    #     # This case should ideally not happen if n > 0 or m > 0 due to path construction,
-    #     # but as a safeguard
-    #     normalized_frechet_cost = np.inf if (n > 0 or m > 0) else 0.0
 
     return total_cost, path
 
-
-
-def frechet_with_euclidean_cost(seq1_coords, seq2_coords):
-    """
-    Performs Frechet on two sequences of 3D backbone coordinates,
-    using Euclidean distance as the local cost metric between corresponding residues.
-
-    Args:
-        seq1_coords (list of np.ndarray): List where each element is a (1, 3) or (N_atoms, 3)
-                                          numpy array representing the coordinates for one residue/segment.
-                                          For simple C-alpha, it's (1, 3).
-        seq2_coords (list of np.ndarray): Similar list for the second sequence.
-
-    Returns:
-        tuple: (dtw_cost, warping_path)
-            dtw_cost (float): The total accumulated cost of the optimal warping path.
-            warping_path (list): A list of (index_seq1, index_seq2) tuples representing
-                                 the optimal alignment path.
-    """
-    n = len(seq1_coords)
-    m = len(seq2_coords)
-
-    # Initialize the cost matrix
-    D = np.full((n, m), np.inf)
-
-    # Fill D[0][0]
-    D[0, 0] = euclidean_distance(seq1_coords[0].reshape(-1, 3), seq2_coords[0].reshape(-1, 3))
-
-    # Fill first column
-    for i in range(1, n):
-        cost = euclidean_distance(seq1_coords[i].reshape(-1, 3), seq2_coords[0].reshape(-1, 3))
-        D[i, 0] = max(D[i - 1, 0], cost)
-
-    # Fill first row
-    for j in range(1, m):
-        cost = euclidean_distance(seq1_coords[0].reshape(-1, 3), seq2_coords[j].reshape(-1, 3))
-        D[0, j] = max(D[0, j - 1], cost)
-
-    # Fill the rest of the matrix
-    for i in range(1, n):
-        for j in range(1, m):
-            cost = euclidean_distance(seq1_coords[i].reshape(-1, 3), seq2_coords[j].reshape(-1, 3))
-            min_prev = min(D[i - 1, j], D[i - 1, j - 1], D[i, j - 1])
-            D[i, j] = max(cost, min_prev)
-
-    # Optional: Traceback to get the warping path
-    path = []
-    i, j = n - 1, m - 1
-    path.append((i, j))
-    while i > 0 or j > 0:
-        candidates = []
-        if i > 0 and j > 0:
-            candidates.append((D[i - 1, j - 1], i - 1, j - 1))
-        if i > 0:
-            candidates.append((D[i - 1, j], i - 1, j))
-        if j > 0:
-            candidates.append((D[i, j - 1], i, j - 1))
-        if candidates:
-            _, i, j = min(candidates)
-            path.append((i, j))
-
-    path.reverse()
-
-
-    total_cost = D[n-1, m-1]
-    length_of_warping_path = len(path)
-
-    if length_of_warping_path > 0:
-        normalized_frechet_cost = total_cost / length_of_warping_path
-    else:
-        # This case should ideally not happen if n > 0 or m > 0 due to path construction,
-        # but as a safeguard
-        normalized_frechet_cost = np.inf if (n > 0 or m > 0) else 0.0
-
-    return normalized_frechet_cost, path
 
 # --- Worker function for parallel processing ---
 # This function must be defined at the top level (not inside if __name__ == "__main__":) so it can be pickled and sent to other processes.
@@ -349,9 +242,4 @@ if __name__ == "__main__":
     np.save("frechet_distance_matrix_parallel.npy", distance_matrix)
     print(f"Freceht distance matrix (NumPy array) saved to 'frechet_distance_matrix_parallel.npy'")
     
-    # # Save as CSV for easier viewing (optional, can be very large)
-    # distance_matrix_df = pd.DataFrame(distance_matrix, index=pdb_ids_list, columns=pdb_ids_list)
-    # distance_matrix_df.to_csv("frechet_distance_matrix_parallel.csv")
-    # print(f"DTW distance matrix (CSV) saved to 'frechet_distance_matrix_parallel.csv'")
-
     print("\nParallel processing complete!")
