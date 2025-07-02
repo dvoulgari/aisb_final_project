@@ -25,4 +25,5 @@
 !*.pdb
 !pairwise_dtw_distances_parallel.csv
 !dtw_distance_matrix_parallel.npy
+!frechet_distance_matrix_parallel.npy
 # Add anything that you should be included but it's not
