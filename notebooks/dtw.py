@@ -172,7 +172,7 @@ def _compare_pair(args):
     
 # --- Main Automation Block ---
 if __name__ == "__main__":
-    pdb_folder_path = "/Users/dvoulgari/Desktop/Structural Bioinfromatics/AISB_Final_Project/20250614_0356239"
+    pdb_folder_path = "../antibodies/antibodies"
 
     if not os.path.exists(pdb_folder_path):
         print(f"Error: PDB folder not found at '{pdb_folder_path}'. Please check the path.")
@@ -234,7 +234,7 @@ if __name__ == "__main__":
     dtw_df = pd.DataFrame(comparison_results)
 
     # Save to CSV
-    output_csv_path = "pairwise_dtw_distances_parallel.csv"
+    output_csv_path = "../output/pairwise_dtw_distances_parallel.csv"
     dtw_df.to_csv(output_csv_path, index=False)
     print(f"\nAll pairwise DTW distances saved to '{output_csv_path}'")
 
@@ -259,12 +259,7 @@ if __name__ == "__main__":
         distance_matrix[idx2, idx1] = row['DTW_Distance_Normalized'] # Symmetric matrix
 
     # Save the distance matrix
-    np.save("dtw_distance_matrix_parallel.npy", distance_matrix)
+    np.save("../output/dtw_distance_matrix_parallel.npy", distance_matrix)
     print(f"DTW distance matrix (NumPy array) saved to 'dtw_distance_matrix_parallel.npy'")
     
-    # # Save as CSV for easier viewing (optional, can be very large)
-    # distance_matrix_df = pd.DataFrame(distance_matrix, index=pdb_ids_list, columns=pdb_ids_list)
-    # distance_matrix_df.to_csv("dtw_distance_matrix_parallel.csv")
-    # print(f"DTW distance matrix (CSV) saved to 'dtw_distance_matrix_parallel.csv'")
-
     print("\nParallel processing complete!")

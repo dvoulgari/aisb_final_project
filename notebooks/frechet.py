@@ -151,8 +151,8 @@ def _compare_pair(args):
     
 # --- Main Automation Block ---
 if __name__ == "__main__":
-    # CHANGE THAT
-    pdb_folder_path = "AISB_Final_Project/antibodies/antibodies" # <-------- CHANGE THAT
+    # Antibodies folder
+    pdb_folder_path = "../antibodies/antibodies" 
 
     if not os.path.exists(pdb_folder_path):
         print(f"Error: PDB folder not found at '{pdb_folder_path}'. Please check the path.")
@@ -214,7 +214,7 @@ if __name__ == "__main__":
     frechet_df = pd.DataFrame(comparison_results)
 
     # Save to CSV
-    output_csv_path = "pairwise_frechet_distances_parallel.csv"
+    output_csv_path = "../output/pairwise_frechet_distances_parallel.csv"
     frechet_df.to_csv(output_csv_path, index=False)
     print(f"\nAll pairwise Frechet distances saved to '{output_csv_path}'")
 
@@ -239,7 +239,7 @@ if __name__ == "__main__":
         distance_matrix[idx2, idx1] = row['Frechet_Distance'] # Symmetric matrix
 
     # Save the distance matrix
-    np.save("frechet_distance_matrix_parallel.npy", distance_matrix)
+    np.save("../output/frechet_distance_matrix_parallel.npy", distance_matrix)
     print(f"Freceht distance matrix (NumPy array) saved to 'frechet_distance_matrix_parallel.npy'")
     
     print("\nParallel processing complete!")
