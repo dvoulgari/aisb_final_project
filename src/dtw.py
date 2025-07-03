@@ -234,7 +234,7 @@ if __name__ == "__main__":
     dtw_df = pd.DataFrame(comparison_results)
 
     # Save to CSV
-    output_csv_path = "../output/pairwise_dtw_distances_parallel.csv"
+    output_csv_path = "../outputs/pairwise_dtw_distances_parallel.csv"
     dtw_df.to_csv(output_csv_path, index=False)
     print(f"\nAll pairwise DTW distances saved to '{output_csv_path}'")
 
@@ -259,7 +259,7 @@ if __name__ == "__main__":
         distance_matrix[idx2, idx1] = row['DTW_Distance_Normalized'] # Symmetric matrix
 
     # Save the distance matrix
-    np.save("../output/dtw_distance_matrix_parallel.npy", distance_matrix)
+    np.save("../outputs/dtw_distance_matrix_parallel.npy", distance_matrix)
     print(f"DTW distance matrix (NumPy array) saved to 'dtw_distance_matrix_parallel.npy'")
     
     print("\nParallel processing complete!")
