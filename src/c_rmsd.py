@@ -151,7 +151,7 @@ def _compare_pair_c_rmsd(args):
 # --- Main Automation Block ---
 if __name__ == "__main__":
     # IMPORTANT: Replace this with the actual path to your PDB files
-    pdb_folder_path = "/Users/dvoulgari/Desktop/Structural Bioinfromatics/AISB_Final_Project/20250614_0356239"
+    pdb_folder_path = "../antibodies/antibodies"
 
     if not os.path.exists(pdb_folder_path):
         print(f"Error: PDB folder not found at '{pdb_folder_path}'. Please check the path.")
@@ -211,7 +211,7 @@ if __name__ == "__main__":
     comparison_df = pd.DataFrame(comparison_results)
 
     # Save to CSV
-    output_csv_path = "pairwise_c_rmsd_distances_parallel.csv"
+    output_csv_path = "../outputs/pairwise_c_rmsd_distances_parallel.csv"
     comparison_df.to_csv(output_csv_path, index=False)
     print(f"\nAll pairwise c-RMSD distances saved to '{output_csv_path}'")
 
@@ -237,12 +237,7 @@ if __name__ == "__main__":
         c_rmsd_matrix[idx2, idx1] = row['c_RMSD'] # Symmetric
 
     # Save the distance matrix
-    np.save("c_rmsd_distance_matrix_parallel.npy", c_rmsd_matrix)
-    print(f"c-RMSD distance matrix (NumPy array) saved to 'c_rmsd_distance_matrix_parallel.npy'")
-
-    # Optional: Save as CSV for easier viewing (can be very large for many comparisons)
-    # c_rmsd_matrix_df = pd.DataFrame(c_rmsd_matrix, index=pdb_ids_list, columns=pdb_ids_list)
-    # c_rmsd_matrix_df.to_csv("c_rmsd_distance_matrix_parallel.csv")
-    # print(f"c-RMSD distance matrix (CSV) saved to 'c_rmsd_distance_matrix_parallel.csv'")
+    np.save("../outputs/c_rmsd_distance_matrix_parallel.npy", c_rmsd_matrix)
+    print(f"c-RMSD distance matrix (NumPy array) saved to '../outputs/c_rmsd_distance_matrix_parallel.npy'")
 
     print("\nParallel processing complete!")
